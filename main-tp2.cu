@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <matadd.cuh>
+#include "matadd.cuh"
 
 int main()
 {
