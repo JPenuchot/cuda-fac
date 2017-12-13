@@ -20,6 +20,8 @@ void extract(int* hIn, int* hOut, std::size_t inNumelm)
   cudaMalloc(&dIn, inTabsize);
   cudaMalloc(&dOut, outTabsize);
 
+  std::cout << "Errno : " << cudaGetLastError() << "\n";
+
   //  Copy from host to device
   cudaMemcpy(dIn, hIn, inTabsize, cudaMemcpyHostToDevice);
 

@@ -9,12 +9,12 @@ __global__ void evennoteven_kernel(int* dIn)
 
 void evennoteven(int* hIn, int* hOut, std::size_t numelm)
 {
-  int tabsize = numelm * sizeof(int);
+  const std::size_t tabsize = numelm * sizeof(int);
 
-  //int maxThreads;
-  //cudaDeviceGetAttribute(&maxThreads, cudaDevAttrMaxThreadsPerBlock, 0);
+  int maxThreads;
+  cudaDeviceGetAttribute(&maxThreads, cudaDevAttrMaxThreadsPerBlock, 0);
 
-  //std::cout << "Max " << maxThreads << " threads.\n\n";
+  std::cout << "Max " << maxThreads << " threads.\n\n";
 
   //  Memory allocation
 
