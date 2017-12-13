@@ -39,7 +39,6 @@ void matadd(int* hDest, int* hA, int* hB, std::size_t n)
 
   /* thinking.jpg */
   
-  int blockSize = n / threadDim;
   int numBlock = n / threadDim;
 
   //  Coeur
