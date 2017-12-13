@@ -1,18 +1,34 @@
 #pragma once
 
-__global__ void evennoteven_kernel(int* dIn, int* dOut)
+#include <iostream>
+
+__global__ void evennoteven_kernel(int* dIn)
 {
-  if(dIn[threadIdx.x] % 2 == 0) dOut[threadIdx.x] = dIn[threadIdx.x] * 2;
+  dIn[threadIdx.x * 2] *= 2;
 }
 
-void evennoteven(int* dIn, int* dOut, std::size_t numelm)
+void evennoteven(int* hIn, int* hOut, std::size_t numelm)
 {
-  const std::size_t tabsize = numelm * sizeof(int);
+  int tabsize = numelm * sizeof(int);
+
+  //int maxThreads;
+  //cudaDeviceGetAttribute(&maxThreads, cudaDevAttrMaxThreadsPerBlock, 0);
+
+  //std::cout << "Max " << maxThreads << " threads.\n\n";
 
   //  Memory allocation
-  cudaMalloc(&dIn, tabsize);
-  cudaMalloc(&dOut, tabsize);
 
-  evennoteven_kernel <<< 1, numelm >>> (dIn, dOut);
+  int* dIn;
+
+  if(cudaMalloc(&dIn, tabsize))
+    std::cout << "Error at device memory allocation.\n";
+
+  if(cudaMemcpy(dIn, hIn, tabsize, cudaMemcpyHostToDevice))
+    std::cout << "Error at copy from host to device.\n";
+
+  evennoteven_kernel <<< 1, numelm / 2 >>> (dIn);
+
+  if(cudaMemcpy(hOut, dIn, tabsize, cudaMemcpyDeviceToHost))
+    std::cout << "Error at copy from device to host.\n";
 }
 
