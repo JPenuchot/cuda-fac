@@ -1,19 +1,18 @@
 #pragma once
 
-template<typename T>
-__global__ void evennoteven_kernel(T* dIn, T* dOut)
+__global__ void evennoteven_kernel(int* dIn, int* dOut)
 {
-  if(dIn[threadIdx.x] % 2 == 0) dOut[threadIdx.x] = dIn[threadIdx] * 2;
+  if(dIn[threadIdx.x] % 2 == 0) dOut[threadIdx.x] = dIn[threadIdx.x] * 2;
 }
 
-template<typename T>
-void evennoteven(T* dIn, T* dOut, std::size_t numelm)
+void evennoteven(int* dIn, int* dOut, std::size_t numelm)
 {
-  const auto tabsize = numelm * sizeof(T);
+  const std::size_t tabsize = numelm * sizeof(int);
 
   //  Memory allocation
-  cudaMalloc(&((void*)dIn), numelm * sizeof(T));
-  cudaMalloc(&((void*)dOut), numelm * sizeof(T));
+  cudaMalloc(&dIn, tabsize);
+  cudaMalloc(&dOut, tabsize);
 
-  evennoteven_kernel <<< 1, numelm >>>;
+  evennoteven_kernel <<< 1, numelm >>> (dIn, dOut);
 }
+

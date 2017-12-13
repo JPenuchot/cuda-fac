@@ -1,6 +1,6 @@
 #pragma once
 
-__device__ void extract_kernel(int* dIn, int* dOut)
+__global__ void extract_kernel(int* dIn, int* dOut)
 {
   int id = threadIdx.x;
   dOut[id] = dIn[id * 2];
@@ -8,7 +8,7 @@ __device__ void extract_kernel(int* dIn, int* dOut)
 
 void extract(int* hIn, int* hOut, std::size_t inNumelm)
 {
-  const std::size_t outNumelm = insize / 2;
+  const std::size_t outNumelm = inNumelm / 2;
 
   int* dIn;
   int* dOut;
@@ -17,8 +17,8 @@ void extract(int* hIn, int* hOut, std::size_t inNumelm)
   const std::size_t outTabsize = outNumelm * sizeof(int);
 
   //  Memory allocation
-  cudaMalloc(&((void*)dIn), inTabsize);
-  cudaMalloc(&((void*)dOut), outTabsize);
+  cudaMalloc(&dIn, inTabsize);
+  cudaMalloc(&dOut, outTabsize);
 
   //  Copy from host to device
   cudaMemcpy(dIn, hIn, inTabsize, cudaMemcpyHostToDevice);
