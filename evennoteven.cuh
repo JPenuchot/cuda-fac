@@ -4,7 +4,13 @@
 
 __global__ void evennoteven_kernel(int* dIn)
 {
-  dIn[threadIdx.x * 2] *= 2;
+  const int bid = blockIdx.x;
+  const int bdim = blockDim.x;
+  const int tid = threadIdx.x;
+
+  const int id = bid * bdim + tid;
+
+  dIn[id * 2] *= 2;
 }
 
 void evennoteven(int* hIn, int* hOut, std::size_t numelm)
@@ -26,9 +32,13 @@ void evennoteven(int* hIn, int* hOut, std::size_t numelm)
   if(cudaMemcpy(dIn, hIn, tabsize, cudaMemcpyHostToDevice))
     std::cout << "Error at copy from host to device.\n";
 
-  evennoteven_kernel <<< 1, numelm / 2 >>> (dIn);
+  int nbBlocks = (numelm / 2 / maxThreads) + 1;
+  int nbThreads = ((numelm / 2) - 1 % maxThreads) + 1;
+
+  std::cout << nbBlocks << " * " << nbThreads << '\n';
+
+  evennoteven_kernel <<< nbBlocks, nbThreads >>> (dIn);
 
   if(cudaMemcpy(hOut, dIn, tabsize, cudaMemcpyDeviceToHost))
     std::cout << "Error at copy from device to host.\n";
 }
-
