@@ -2,18 +2,19 @@
 
 __device__ void extract_kernel(int* dIn, int* dOut)
 {
-  auto id = threadIdx.x;
+  int id = threadIdx.x;
   dOut[id] = dIn[id * 2];
 }
 
 void extract(int* hIn, int* hOut, std::size_t inNumelm)
 {
-  const auto outNumelm = insize / 2;
+  const std::size_t outNumelm = insize / 2;
 
-  int* dIn, dOut;
+  int* dIn;
+  int* dOut;
   
-  const auto inTabsize = inNumelm * sizeof(int);
-  const auto outTabsize = outNumelm * sizeof(int);
+  const std::size_t inTabsize = inNumelm * sizeof(int);
+  const std::size_t outTabsize = outNumelm * sizeof(int);
 
   //  Memory allocation
   cudaMalloc(&((void*)dIn), inTabsize);
