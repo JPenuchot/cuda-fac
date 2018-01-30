@@ -38,16 +38,16 @@ void matadd(int* hDest, int* hA, int* hB, std::size_t n)
   /* thinking.jpg */
   
   //  Coeur
-  matadd_kernel<<< , >>> (dDest, dA, dB, n);
+  //matadd_kernel<<< dim3(,,1) , dim3(,,1) >>> (dDest, dA, dB, n);
   
   //  Bas
-  matadd_kernel<<< , >>> (dDest, dA, dB, n);
+  //matadd_kernel<<< dim3(,,1) , dim3(,,1) >>> (dDest, dA, dB, n);
 
   //  Droite
-  matadd_kernel<<< , >>> (dDest, dA, dB, n);
+  //matadd_kernel<<< dim3(,,1) , dim3(,,1) >>> (dDest, dA, dB, n);
 
   //  Bas-droite
-  matadd_kernel<<< , >>> (dDest, dA, dB, n);
+  //matadd_kernel<<< dim3(,,1) , dim3(,,1) >>> (dDest, dA, dB, n);
 
   cudaMemcpy(hDest, dDest, matsize, cudaMemcpyDeviceToHost);
 }
