@@ -7,7 +7,7 @@ __global__ void matadd_kernel ( int* dest
   const int posX = offsetX + (blockIdx.x * blockDim.x + threadIdx.x);
   const int posY = offsetY + (blockIdx.y * blockDim.y + threadIdx.y);
 
-  const int id = posY * matWidth + posY;
+  const int id = posY * matWidth + posX;
 
   dest[id] = A[id] + B[id];
 }
@@ -23,7 +23,9 @@ void matadd(int* hDest, int* hA, int* hB, std::size_t n)
   
   int matsize = n * n * sizeof(int);
 
-  int* dA, dB, dDest;
+  int* dA;
+  int* dB;
+  int* dDest;
 
   cudaMalloc(&dA, matsize);
   cudaMalloc(&dB, matsize);
