@@ -24,11 +24,12 @@ void extract(int* hIn, int* hOut, std::size_t inNumelm)
   int maxThreads;  
   cudaDeviceGetAttribute(&maxThreads, cudaDevAttrMaxThreadsPerBlock, 0);
 
-  //  Memory allocation
-  cudaMalloc(&dIn, inTabsize);
-  cudaMalloc(&dOut, outTabsize);
+  //  Memory allocation with a bit of error management for q. 5
+  if(cudaMalloc(&dIn, inTabsize))
+    { std::cout << "errno : " << cudaGetLastError() << '\n'; return; }
 
-  std::cout << "Errno : " << cudaGetLastError() << "\n";
+  if(cudaMalloc(&dOut, outTabsize))
+    { std::cout << "errno : " << cudaGetLastError() << '\n'; return; }
 
   //  Copy from host to device
   cudaMemcpy(dIn, hIn, inTabsize, cudaMemcpyHostToDevice);
