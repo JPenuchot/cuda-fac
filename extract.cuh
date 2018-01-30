@@ -1,21 +1,19 @@
 #pragma once
 
-template<typename T>
-__device__ void extract_kernel(T* dIn, T* dOut)
+__device__ void extract_kernel(int* dIn, int* dOut)
 {
   auto id = threadIdx.x;
   dOut[id] = dIn[id * 2];
 }
 
-template<typename T>
-void extract(T* hIn, T* hOut, std::size_t inNumelm)
+void extract(int* hIn, int* hOut, std::size_t inNumelm)
 {
   const auto outNumelm = insize / 2;
 
-  T* dIn, dOut;
+  int* dIn, dOut;
   
-  const auto inTabsize = inNumelm * sizeof(T);
-  const auto outTabsize = outNumelm * sizeof(T);
+  const auto inTabsize = inNumelm * sizeof(int);
+  const auto outTabsize = outNumelm * sizeof(int);
 
   //  Memory allocation
   cudaMalloc(&((void*)dIn), inTabsize);
