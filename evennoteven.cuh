@@ -1,7 +1,7 @@
 #pragma once
 
 template<typename T>
-__device__ void evennoteven_kernel(T* dIn, T* dOut)
+__global__ void evennoteven_kernel(T* dIn, T* dOut)
 {
   if(dIn[threadIdx.x] % 2 == 0) dOut[threadIdx.x] = dIn[threadIdx] * 2;
 }
